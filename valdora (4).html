@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Supremo Tribunal Universal de Valdora</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700;900&family=Cinzel:wght@400;600;700&family=EB+Garamond:ital,wght@0,400;0,500;1,400;1,500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #c9a84c;
+    --gold-light: #e8c96a;
+    --gold-dark: #8a6a1f;
+    --crimson: #7a0b1e;
+    --crimson-light: #a01228;
+    --deep: #050508;
+    --parchment: #f5edd6;
+    --parchment-dark: #e8d9b5;
+    --ink: #1a1208;
+    --smoke: rgba(201,168,76,0.07);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    background-color: var(--deep);
+    color: var(--parchment);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 18px;
+    line-height: 1.7;
+    overflow-x: hidden;
+  }
+
+  #starfield {
+    position: fixed; inset: 0; z-index: 0;
+    background: radial-gradient(ellipse at 50% 0%, #12060f 0%, #050508 70%);
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .star {
+    position: absolute;
+    border-radius: 50%;
+    background: #fff;
+    animation: twinkle var(--d, 3s) ease-in-out infinite alternate;
+  }
+  @keyframes twinkle { from { opacity: var(--lo, 0.1); } to { opacity: var(--hi, 0.9); } }
+
+  #starfield::after {
+    content: '';
+    position: absolute; inset: 0;
+    background:
+      radial-gradient(ellipse 60% 40% at 20% 30%, rgba(122,11,30,0.18) 0%, transparent 70%),
+      radial-gradient(ellipse 50% 30% at 80% 60%, rgba(80,40,120,0.13) 0%, transparent 70%),
+      radial-gradient(ellipse 40% 50% at 50% 80%, rgba(201,168,76,0.06) 0%, transparent 70%);
+  }
+
+  .container { position: relative; z-index: 1; max-width: 1100px; margin: 0 auto; padding: 0 2rem; }
+
+  header {
+    position: relative; z-index: 10;
+    text-align: center;
+    padding: 5rem 2rem 3rem;
+    border-bottom: 1px solid rgba(201,168,76,0.25);
+  }
+
+  .sigil {
+    width: 120px; height: 120px;
+    margin: 0 auto 2rem;
+    animation: rotateGlow 20s linear infinite;
+  }
+  @keyframes rotateGlow {
+    0%   { filter: drop-shadow(0 0 8px var(--gold)) drop-shadow(0 0 20px rgba(201,168,76,0.4)); transform: rotate(0deg); }
+    50%  { filter: drop-shadow(0 0 16px var(--gold-light)) drop-shadow(0 0 40px rgba(201,168,76,0.6)); transform: rotate(180deg); }
+    100% { filter: drop-shadow(0 0 8px var(--gold)) drop-shadow(0 0 20px rgba(201,168,76,0.4)); transform: rotate(360deg); }
+  }
+
+  .divider-rune {
+    display: flex; align-items: center; justify-content: center; gap: 1rem;
+    margin: 1.2rem 0;
+    color: var(--gold-dark);
+    font-size: 1.1rem;
+    letter-spacing: 0.3em;
+  }
+  .divider-rune::before, .divider-rune::after {
+    content: '';
+    flex: 1; max-width: 200px;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--gold-dark), transparent);
+  }
+
+  .institution-label {
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.4em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    margin-bottom: 0.6rem;
+    animation: fadeDown 1.2s ease both;
+  }
+
+  h1 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(1.8rem, 5vw, 3.5rem);
+    font-weight: 900;
+    line-height: 1.15;
+    background: linear-gradient(135deg, var(--gold-light) 0%, var(--gold) 40%, #fff8e0 60%, var(--gold) 80%, var(--gold-dark) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    animation: fadeDown 1.4s ease both;
+    margin-bottom: 0.4rem;
+  }
+
+  .subtitle {
+    font-family: 'Cinzel', serif;
+    font-size: clamp(0.7rem, 2vw, 0.95rem);
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    color: var(--gold);
+    opacity: 0.75;
+    animation: fadeDown 1.6s ease both;
+    margin-bottom: 1rem;
+  }
+
+  .header-motto {
+    font-style: italic;
+    color: var(--parchment-dark);
+    opacity: 0.7;
+    font-size: 1rem;
+    max-width: 500px;
+    margin: 0 auto;
+    animation: fadeDown 1.8s ease both;
+  }
+
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-18px); } to { opacity: 1; transform: none; } }
+
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(5,5,8,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+    padding: 0.9rem 2rem;
+  }
+  nav ul { display: flex; justify-content: center; flex-wrap: wrap; gap: 0.3rem 1.5rem; list-style: none; }
+  nav a {
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--gold);
+    text-decoration: none;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid transparent;
+    transition: all 0.3s;
+    position: relative;
+  }
+  nav a::after {
+    content: '';
+    position: absolute; bottom: -2px; left: 50%; right: 50%;
+    height: 1px; background: var(--gold-light);
+    transition: all 0.3s;
+  }
+  nav a:hover { color: var(--gold-light); border-color: rgba(201,168,76,0.3); }
+  nav a:hover::after { left: 0; right: 0; }
+
+  section { padding: 5rem 0; }
+  section + section { border-top: 1px solid rgba(201,168,76,0.12); }
+
+  .section-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.5em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    margin-bottom: 0.8rem;
+  }
+
+  h2 {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(1.4rem, 3vw, 2.2rem);
+    font-weight: 700;
+    color: var(--gold-light);
+    margin-bottom: 1.5rem;
+    line-height: 1.25;
+  }
+
+  h3 {
+    font-family: 'Cinzel', serif;
+    font-size: 1.1rem;
+    color: var(--gold);
+    margin-bottom: 0.6rem;
+    letter-spacing: 0.05em;
+  }
+
+  p { color: var(--parchment-dark); opacity: 0.88; margin-bottom: 1rem; }
+
+  .hero-decree {
+    position: relative;
+    text-align: center;
+    padding: 6rem 2rem;
+    overflow: hidden;
+  }
+  .hero-decree::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 50%, rgba(122,11,30,0.22) 0%, transparent 70%);
+  }
+  .decree-box {
+    position: relative;
+    max-width: 700px; margin: 0 auto;
+    border: 1px solid rgba(201,168,76,0.3);
+    padding: 3rem;
+    background: rgba(201,168,76,0.03);
+    clip-path: polygon(0 0, calc(100% - 20px) 0, 100% 20px, 100% 100%, 20px 100%, 0 calc(100% - 20px));
+  }
+  .decree-box::before, .decree-box::after {
+    content: 'x2726';
+    position: absolute;
+    color: var(--gold);
+    font-size: 1.4rem;
+  }
+  .decree-box::before { top: 1rem; left: 1rem; }
+  .decree-box::after  { bottom: 1rem; right: 1rem; }
+
+  .decree-text { font-size: 1.25rem; font-style: italic; color: var(--parchment); line-height: 1.8; }
+  .decree-author {
+    margin-top: 1.5rem;
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.25em;
+    color: var(--gold-dark);
+    text-transform: uppercase;
+  }
+
+  .cols-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; }
+  .cols-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 2rem; }
+  @media (max-width: 768px) { .cols-2, .cols-3 { grid-template-columns: 1fr; } }
+
+  .card {
+    border: 1px solid rgba(201,168,76,0.2);
+    padding: 2rem;
+    background: rgba(201,168,76,0.03);
+    transition: all 0.4s;
+    position: relative;
+    overflow: hidden;
+  }
+  .card::before {
+    content: '';
+    position: absolute; top: 0; left: 0;
+    width: 3px; height: 100%;
+    background: linear-gradient(180deg, var(--gold-dark), var(--crimson), transparent);
+    opacity: 0; transition: opacity 0.4s;
+  }
+  .card:hover { border-color: rgba(201,168,76,0.5); transform: translateY(-4px); background: rgba(201,168,76,0.06); }
+  .card:hover::before { opacity: 1; }
+
+  .card-icon { font-size: 2.2rem; margin-bottom: 1rem; display: block; filter: drop-shadow(0 0 8px var(--gold)); }
+
+  .magister-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px,1fr)); gap: 2rem; }
+
+  .magister-card {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    border: 1px solid rgba(201,168,76,0.15);
+    background: rgba(5,5,8,0.6);
+    transition: all 0.4s;
+  }
+  .magister-card:hover { border-color: rgba(201,168,76,0.4); box-shadow: 0 0 30px rgba(201,168,76,0.08); }
+
+  .magister-seal {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    border: 2px solid var(--gold-dark);
+    margin: 0 auto 1rem;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem;
+    background: radial-gradient(circle, rgba(122,11,30,0.3), rgba(5,5,8,0.8));
+    box-shadow: 0 0 20px rgba(201,168,76,0.15);
+  }
+
+  .magister-title { font-family: 'Cinzel', serif; font-size: 0.65rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--gold-dark); margin-bottom: 0.3rem; }
+  .magister-name  { font-family: 'Cinzel', serif; font-size: 1rem; color: var(--gold-light); margin-bottom: 0.2rem; }
+  .magister-realm { font-size: 0.85rem; font-style: italic; color: var(--parchment-dark); opacity: 0.6; }
+
+  .timeline { position: relative; padding-left: 2.5rem; }
+  .timeline::before { content: ''; position: absolute; top: 0; bottom: 0; left: 0; width: 1px; background: linear-gradient(180deg, var(--gold-dark) 0%, rgba(201,168,76,0.1) 100%); }
+  .timeline-item { position: relative; margin-bottom: 2.5rem; }
+  .timeline-item::before { content: '◆'; position: absolute; left: -2.9rem; top: 0.2rem; color: var(--gold); font-size: 0.7rem; filter: drop-shadow(0 0 6px var(--gold)); }
+  .timeline-year { font-family: 'Cinzel', serif; font-size: 0.75rem; letter-spacing: 0.2em; color: var(--gold-dark); margin-bottom: 0.3rem; }
+
+  .edict-list { list-style: none; }
+  .edict-list li { padding: 1.2rem 1.5rem; border-bottom: 1px solid rgba(201,168,76,0.1); display: flex; gap: 1.2rem; align-items: flex-start; transition: background 0.3s; }
+  .edict-list li:hover { background: rgba(201,168,76,0.04); }
+  .edict-num { font-family: 'Cinzel', serif; font-size: 0.65rem; color: var(--crimson-light); letter-spacing: 0.15em; white-space: nowrap; padding-top: 0.25rem; min-width: 60px; }
+
+  .seal-banner {
+    text-align: center;
+    padding: 4rem 2rem;
+    background: linear-gradient(135deg, rgba(122,11,30,0.15), rgba(5,5,8,0) 50%, rgba(80,40,0,0.15));
+    border-top: 1px solid rgba(201,168,76,0.2);
+    border-bottom: 1px solid rgba(201,168,76,0.2);
+    margin: 2rem 0;
+  }
+  .big-seal {
+    font-size: 5rem;
+    display: block;
+    margin: 0 auto 1rem;
+    animation: pulse 3s ease-in-out infinite;
+    filter: drop-shadow(0 0 15px var(--gold));
+  }
+  @keyframes pulse {
+    0%,100% { transform: scale(1); filter: drop-shadow(0 0 12px var(--gold)); }
+    50%      { transform: scale(1.04); filter: drop-shadow(0 0 28px var(--gold-light)); }
+  }
+
+  footer {
+    position: relative; z-index: 1;
+    text-align: center;
+    padding: 4rem 2rem;
+    border-top: 1px solid rgba(201,168,76,0.2);
+    background: rgba(5,5,8,0.8);
+  }
+  .footer-logo { font-family: 'Cinzel Decorative', serif; font-size: 1rem; color: var(--gold-dark); margin-bottom: 0.5rem; }
+  .footer-text  { font-size: 0.8rem; color: var(--parchment-dark); opacity: 0.4; letter-spacing: 0.1em; }
+  .footer-runes { font-size: 1.5rem; color: var(--gold-dark); opacity: 0.4; margin-bottom: 1rem; letter-spacing: 0.5rem; }
+
+  .reveal { opacity: 0; transform: translateY(30px); transition: opacity 0.7s ease, transform 0.7s ease; }
+  .reveal.visible { opacity: 1; transform: none; }
+
+  ::selection { background: rgba(122,11,30,0.5); color: var(--gold-light); }
+
+  /* ── SCHEDULING FORM ── */
+  .schedule-wrap {
+    max-width: 680px; margin: 0 auto;
+    position: relative;
+  }
+  .schedule-frame {
+    border: 1px solid rgba(201,168,76,0.3);
+    padding: 3rem;
+    background: rgba(201,168,76,0.03);
+    position: relative;
+    clip-path: polygon(0 0, calc(100% - 24px) 0, 100% 24px, 100% 100%, 24px 100%, 0 calc(100% - 24px));
+  }
+  .schedule-frame::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(122,11,30,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .corner-gem {
+    position: absolute;
+    width: 10px; height: 10px;
+    background: var(--gold);
+    transform: rotate(45deg);
+    box-shadow: 0 0 10px var(--gold);
+  }
+  .corner-gem.tl { top: -5px; left: -5px; }
+  .corner-gem.tr { top: -5px; right: -5px; }
+  .corner-gem.bl { bottom: -5px; left: -5px; }
+  .corner-gem.br { bottom: -5px; right: -5px; }
+
+  .field-group { margin-bottom: 1.8rem; }
+  .field-label {
+    display: block;
+    font-family: 'Cinzel', serif;
+    font-size: 0.72rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    color: var(--gold-dark);
+    margin-bottom: 0.6rem;
+  }
+  .field-input, .field-select, .field-textarea {
+    width: 100%;
+    background: rgba(5,5,8,0.7);
+    border: 1px solid rgba(201,168,76,0.25);
+    color: var(--parchment);
+    font-family: 'EB Garamond', serif;
+    font-size: 1rem;
+    padding: 0.85rem 1.1rem;
+    outline: none;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    appearance: none;
+  }
+  .field-input:focus, .field-select:focus, .field-textarea:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(201,168,76,0.1), inset 0 0 20px rgba(201,168,76,0.03);
+  }
+  .field-input::placeholder, .field-textarea::placeholder { color: rgba(232,217,181,0.3); }
+  .field-textarea { resize: vertical; min-height: 110px; }
+  .field-select option { background: #0d0b10; color: var(--parchment); }
+
+  .fields-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+  @media(max-width:600px){ .fields-row { grid-template-columns: 1fr; } }
+
+  .submit-btn {
+    width: 100%;
+    padding: 1rem 2rem;
+    background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 50%, var(--gold-dark) 100%);
+    background-size: 200% 100%;
+    border: none;
+    color: var(--ink);
+    font-family: 'Cinzel', serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-position 0.4s, transform 0.2s, box-shadow 0.3s;
+    margin-top: 0.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .submit-btn:hover {
+    background-position: 100% 0;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 30px rgba(201,168,76,0.3);
+  }
+  .submit-btn:active { transform: translateY(0); }
+  .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+  .form-msg {
+    display: none;
+    margin-top: 1.5rem;
+    padding: 1rem 1.5rem;
+    border: 1px solid;
+    font-family: 'Cinzel', serif;
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+    text-align: center;
+  }
+  .form-msg.success { border-color: rgba(201,168,76,0.5); color: var(--gold-light); background: rgba(201,168,76,0.06); }
+  .form-msg.error   { border-color: rgba(160,18,40,0.5);  color: #e88; background: rgba(122,11,30,0.1); }
+  .form-msg.show    { display: block; animation: fadeDown 0.5s ease both; }
+</style>
+</head>
+<body>
+
+<div id="starfield"></div>
+
+<header>
+  <svg class="sigil" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <radialGradient id="sg" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#e8c96a"/>
+        <stop offset="100%" stop-color="#8a6a1f"/>
+      </radialGradient>
+    </defs>
+    <circle cx="60" cy="60" r="56" fill="none" stroke="url(#sg)" stroke-width="1.5" stroke-dasharray="4 3"/>
+    <circle cx="60" cy="60" r="44" fill="none" stroke="#c9a84c" stroke-width="0.8" opacity="0.5"/>
+    <polygon points="60,10 65,52 110,60 65,68 60,110 55,68 10,60 55,52" fill="none" stroke="url(#sg)" stroke-width="1.5" stroke-linejoin="round"/>
+    <polygon points="60,30 74,40 84,55 84,65 74,80 60,90 46,80 36,65 36,55 46,40" fill="rgba(122,11,30,0.2)" stroke="#c9a84c" stroke-width="0.8"/>
+    <ellipse cx="60" cy="60" rx="12" ry="8" fill="none" stroke="#e8c96a" stroke-width="1.2"/>
+    <circle cx="60" cy="60" r="4" fill="#c9a84c" opacity="0.9"/>
+    <circle cx="60" cy="60" r="2" fill="#fff8e0"/>
+    <circle cx="60" cy="6"   r="2.5" fill="#c9a84c"/>
+    <circle cx="60" cy="114" r="2.5" fill="#c9a84c"/>
+    <circle cx="6"  cy="60"  r="2.5" fill="#c9a84c"/>
+    <circle cx="114" cy="60" r="2.5" fill="#c9a84c"/>
+  </svg>
+
+  <p class="institution-label">Ordem Suprema de Valdora &middot; Anno Domini 1 V.E.</p>
+  <h1>Supremo Tribunal<br>Universal de Valdora</h1>
+  <p class="subtitle">Iustitia Aeterna &mdash; Lex Omnia Vincit</p>
+  <div class="divider-rune">&#x2726; &#x2726; &#x2726;</div>
+  <p class="header-motto">&ldquo;Onde a lei dos mundos se encontra, a verdade &eacute; eterna.&rdquo;</p>
+</header>
+
+<nav>
+  <ul>
+    <li><a href="#decreto">O Tribunal</a></li>
+    <li><a href="#jurisdicao">Jurisdi&ccedil;&atilde;o</a></li>
+    <li><a href="#historia">Hist&oacute;ria</a></li>
+    <li><a href="#agendar">Agendar</a></li>
+    <li><a href="#contato">Contato</a></li>
+  </ul>
+</nav>
+
+<section id="decreto">
+  <div class="hero-decree">
+    <div class="decree-box">
+      <p class="decree-text">
+        &ldquo;Que seja conhecida a vontade do Tribunal: nenhuma na&ccedil;&atilde;o, reino, plano ou dimens&atilde;o est&aacute; acima
+        da Lex Universalis de Valdora. Nossa jurisdi&ccedil;&atilde;o estende-se do primeiro fio do &eacute;ter ao &uacute;ltimo
+        gr&atilde;o de mat&eacute;ria no tecido do cosmos.&rdquo;
+      </p>
+      <p class="decree-author">&mdash; Édito Primordial, selado pela Gr&atilde;-Magistra Seraphine Valdorix</p>
+    </div>
+  </div>
+</section>
+
+<div class="seal-banner">
+  <span class="big-seal">&#x2696;</span>
+  <div class="divider-rune">&#x2726; FIAT LUX &mdash; FIAT IUS &#x2726;</div>
+</div>
+
+<section id="jurisdicao">
+  <div class="container">
+    <p class="section-eyebrow reveal">Compet&ecirc;ncia &amp; Alcance</p>
+    <h2 class="reveal">Jurisdi&ccedil;&atilde;o Universal</h2>
+    <p class="reveal" style="max-width:640px; margin-bottom:3rem;">
+      O Supremo Tribunal Universal de Valdora det&eacute;m autoridade sobre todos os planos de exist&ecirc;ncia
+      reconhecidos pelo Conc&iacute;lio das Esferas. Nenhuma entidade, mortal ou imortal, est&aacute; isenta de
+      comparecer perante seus magistrados.
+    </p>
+    <div class="cols-3">
+      <div class="card reveal">
+        <span class="card-icon">&#x1F30D;</span>
+        <h3>Plano Material</h3>
+        <p>Abrange todos os reinos mortais, imp&eacute;rios, cidades-estado e territ&oacute;rios neutros do plano f&iacute;sico de exist&ecirc;ncia.</p>
+      </div>
+      <div class="card reveal" style="transition-delay:0.15s">
+        <span class="card-icon">&#x1F30C;</span>
+        <h3>Planos Et&eacute;reos</h3>
+        <p>Autoridade sobre as cortes dos semideuses, os arquivos astrais e os dom&iacute;nios que permeiam os v&eacute;us da realidade.</p>
+      </div>
+      <div class="card reveal" style="transition-delay:0.3s">
+        <span class="card-icon">&#x1F52E;</span>
+        <h3>Dimens&otilde;es Paralelas</h3>
+        <p>Jurisdi&ccedil;&atilde;o estendida a universos-espelho, bol&ccedil;&otilde;es temporais e realidades fractais reconhecidas pelo Édito 7-&Omega;.</p>
+      </div>
+      <div class="card reveal" style="transition-delay:0.1s">
+        <span class="card-icon">&#x2697;</span>
+        <h3>Crimes Arcanos</h3>
+        <p>Uso il&iacute;cito de magia proibida, viola&ccedil;&otilde;es do C&oacute;digo de Entropia, invoca&ccedil;&otilde;es n&atilde;o autorizadas e necromancia pol&iacute;tica.</p>
+      </div>
+      <div class="card reveal" style="transition-delay:0.25s">
+        <span class="card-icon">&#x1F4DC;</span>
+        <h3>Pactos &amp; Contratos</h3>
+        <p>Disputas entre entidades ligadas por juramentos de sangue, pactos demon&iacute;acos e tratados interplanar.</p>
+      </div>
+      <div class="card reveal" style="transition-delay:0.4s">
+        <span class="card-icon">&#x1F441;</span>
+        <h3>Crimes Contra o Cosmos</h3>
+        <p>Tentativas de alterar o fluxo temporal, destrui&ccedil;&atilde;o de planos completos e usurpa&ccedil;&atilde;o da ordem natural da exist&ecirc;ncia.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="historia">
+  <div class="container">
+    <p class="section-eyebrow reveal">Cr&ocirc;nicas de Valdora</p>
+    <h2 class="reveal">Hist&oacute;ria do Tribunal</h2>
+    <p class="reveal" style="max-width:580px; margin-bottom:3rem;">
+      Fundado no ep&iacute;logo das Guerras do V&aacute;cuo, o Tribunal nasceu da necessidade de uma autoridade
+      supraplanar capaz de arbitrar conflitos que transcendiam a compreens&atilde;o de qualquer na&ccedil;&atilde;o mortal.
+    </p>
+    <div class="timeline">
+      <div class="timeline-item reveal">
+        <p class="timeline-year">Anno 1 V.E. (Valdoriano)</p>
+        <h3>Funda&ccedil;&atilde;o do Tribunal</h3>
+        <p>Ap&oacute;s a Grande Converg&ecirc;ncia, os Sete Arcanos assinam o Pacto Primordial e erguem a Torre de Valdora no nexo entre os planos.</p>
+      </div>
+      <div class="timeline-item reveal">
+        <p class="timeline-year">Anno 87 V.E.</p>
+        <h3>O Julgamento de Khorrath</h3>
+        <p>Primeiro caso envolvendo um ser divino. O deus da guerra Khorrath &eacute; condenado por destrui&ccedil;&atilde;o n&atilde;o autorizada de um plano material, estabelecendo precedente hist&oacute;rico.</p>
+      </div>
+      <div class="timeline-item reveal">
+        <p class="timeline-year">Anno 312 V.E.</p>
+        <h3>Expans&atilde;o Et&eacute;rea</h3>
+        <p>O Édito 7-&Omega; estende a jurisdi&ccedil;&atilde;o do Tribunal &agrave;s dimens&otilde;es paralelas e universos-espelho, triplicando o alcance do Conselho.</p>
+      </div>
+      <div class="timeline-item reveal">
+        <p class="timeline-year">Anno 499 V.E.</p>
+        <h3>A Crise das Tr&ecirc;s Luas</h3>
+        <p>O Tribunal enfrenta sua maior amea&ccedil;a: uma coaliz&atilde;o de cinco imp&eacute;rios tenta dissolver o Conselho. O julgamento dura 9 anos e resulta na condena&ccedil;&atilde;o de todos os cinco monarcas &agrave; mem&oacute;ria apagada.</p>
+      </div>
+      <div class="timeline-item reveal">
+        <p class="timeline-year">Anno 601 V.E. &mdash; Hoje</p>
+        <h3>Era da Consolida&ccedil;&atilde;o</h3>
+        <p>Sob a Gr&atilde;-Magistra Seraphine, o Tribunal entra em seu per&iacute;odo mais est&aacute;vel, com 1.847 casos ativos e jurisdi&ccedil;&atilde;o sobre 93 planos reconhecidos.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="agendar">
+  <div class="container">
+    <p class="section-eyebrow reveal">Convocat&oacute;rio Oficial</p>
+    <h2 class="reveal">Agendar Julgamento</h2>
+    <p class="reveal" style="max-width:580px; margin-bottom:3rem;">
+      Submeta sua solicita&ccedil;&atilde;o de audi&ecirc;ncia ao Collegium de Escribas. Ap&oacute;s an&aacute;lise, o Tribunal
+      confirmar&aacute; a data pelo Canal Arcano informado. Preencha o formul&aacute;rio abaixo com aten&ccedil;&atilde;o &mdash;
+      declara&ccedil;&otilde;es falsas constituem crime perante o Édito 001.
+    </p>
+
+    <div class="schedule-wrap reveal">
+      <div class="schedule-frame">
+        <div class="corner-gem tl"></div>
+        <div class="corner-gem tr"></div>
+        <div class="corner-gem bl"></div>
+        <div class="corner-gem br"></div>
+
+        <div class="field-group">
+          <label class="field-label" for="req-nome">&#x2726; Nome da Entidade / Requerente</label>
+          <input class="field-input" id="req-nome" type="text" placeholder="Informe o nome completo ou t&iacute;tulo oficial" />
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="req-email">&#x2726; Canal Arcano (E-mail)</label>
+          <input class="field-input" id="req-email" type="email" placeholder="seu@email.com" />
+        </div>
+
+        <div class="fields-row">
+          <div class="field-group">
+            <label class="field-label" for="req-data">&#x2726; Data do Julgamento</label>
+            <input class="field-input" id="req-data" type="date" />
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="req-plano">&#x2726; Plano de Origem</label>
+            <select class="field-input field-select" id="req-plano">
+              <option value="">— Selecione o Plano —</option>
+              <option>Plano Material</option>
+              <option>Plano Et&eacute;reo</option>
+              <option>Dimens&atilde;o Paralela</option>
+              <option>Véu de Cinzas</option>
+              <option>Vazio Fragmentado</option>
+              <option>Nexo Atemporal</option>
+              <option>Outro Plano</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="req-tipo">&#x2726; Natureza do Caso</label>
+          <select class="field-input field-select" id="req-tipo">
+            <option value="">— Classifique o Crime / Disputa —</option>
+            <option>Crime Arcano</option>
+            <option>Viola&ccedil;&atilde;o de Pacto ou Contrato</option>
+            <option>Crime Contra o Cosmos</option>
+            <option>Disputa Territorial Interplanar</option>
+            <option>Recurso de Édito</option>
+            <option>Outro</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="req-descricao">&#x2726; Descri&ccedil;&atilde;o Sumária do Caso</label>
+          <textarea class="field-input field-textarea" id="req-descricao" placeholder="Descreva brevemente os fatos, entidades envolvidas e &eacute;ditos potencialmente violados..."></textarea>
+        </div>
+
+        <button class="submit-btn" id="submit-btn" onclick="agendarJulgamento()">
+          &#x2696; Enviar Peti&ccedil;&atilde;o ao Tribunal
+        </button>
+
+        <div class="form-msg" id="form-msg"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contato">
+  <div class="container">
+    <p class="section-eyebrow reveal">Contato Oficial</p>
+    <h2 class="reveal">Canais de Comunica&ccedil;&atilde;o</h2>
+    <p class="reveal" style="max-width:560px; margin-bottom:3rem;">
+      O Tribunal mant&eacute;m Portais de Comunica&ccedil;&atilde;o em todos os planos reconhecidos.
+      Peti&ccedil;&otilde;es urgentes podem ser enviadas via Elo Arcano diretamente ao Collegium de Escribas.
+    </p>
+    <div class="cols-3">
+      <div class="card reveal">
+        <span class="card-icon">&#x1F4DC;</span>
+        <h3>Pergaminho Arcano</h3>
+        <p>Envie sua peti&ccedil;&atilde;o gravada em pergaminho de pele et&eacute;rea ao Portal Principal da Torre de Valdora.</p>
+      </div>
+      <div class="card reveal" style="transition-delay:0.15s">
+        <span class="card-icon">&#x1F310;</span>
+        <h3>Elo Mental</h3>
+        <p>Entidades com capacidade de proje&ccedil;&atilde;o mental podem contatar o Or&aacute;culo Assistente na frequ&ecirc;ncia 7-&Omega;.</p>
+      </div>
+      <div class="card reveal" style="transition-delay:0.3s">
+        <span class="card-icon">&#x1F54A;</span>
+        <h3>Mensageiro Et&eacute;reo</h3>
+        <p>Pombos-espectro do Tribunal est&atilde;o dispon&iacute;veis em todos os portais autorizados nos 93 planos jurisdicionais.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="footer-runes">&#x2696; &#x2726; &#x2696;</div>
+  <p class="footer-logo">Supremo Tribunal Universal de Valdora</p>
+  <div class="divider-rune" style="max-width:300px; margin: 0.8rem auto">&#x2726; &#x2726; &#x2726;</div>
+  <p class="footer-text">Iustitia Aeterna &mdash; Lex Omnia Vincit &middot; Anno 601 V.E.</p>
+  <p class="footer-text" style="margin-top:0.4rem;">&copy; Conselho Pleno de Valdora &middot; Todos os planos reservados</p>
+</footer>
+
+<script>
+(function(){
+  const sf = document.getElementById('starfield');
+  for(let i=0;i<220;i++){
+    const s = document.createElement('div');
+    s.className = 'star';
+    const size = Math.random()*2.2+0.4;
+    s.style.cssText = `width:${size}px;height:${size}px;left:${Math.random()*100}%;top:${Math.random()*100}%;--d:${(Math.random()*4+2).toFixed(1)}s;--lo:${(Math.random()*0.15).toFixed(2)};--hi:${(Math.random()*0.6+0.3).toFixed(2)};animation-delay:${(Math.random()*5).toFixed(1)}s;`;
+    sf.appendChild(s);
+  }
+})();
+
+const observer = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+},{threshold:0.12});
+document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>
+emailjs.init('user_placeholder'); // EmailJS public key placeholder
+
+async function agendarJulgamento() {
+  const nome     = document.getElementById('req-nome').value.trim();
+  const email    = document.getElementById('req-email').value.trim();
+  const data     = document.getElementById('req-data').value;
+  const plano    = document.getElementById('req-plano').value;
+  const tipo     = document.getElementById('req-tipo').value;
+  const descricao= document.getElementById('req-descricao').value.trim();
+  const msg      = document.getElementById('form-msg');
+  const btn      = document.getElementById('submit-btn');
+
+  // Validation
+  if(!nome || !email || !data || !plano || !tipo) {
+    showMsg('error', '&#x26A0; Preencha todos os campos obrigatórios para registrar a petição.');
+    return;
+  }
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){
+    showMsg('error', '&#x26A0; Canal Arcano (e-mail) inválido. Verifique e tente novamente.');
+    return;
+  }
+  const dataFormatada = new Date(data + 'T12:00:00').toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});
+
+  btn.disabled = true;
+  btn.textContent = '⏳ Enviando ao Conselho...';
+
+  // Build mailto as primary fallback (always works without backend)
+  const subject = encodeURIComponent(`[Valdora] Agendamento de Julgamento – ${nome} – ${dataFormatada}`);
+  const body = encodeURIComponent(
+`PETIÇÃO DE AGENDAMENTO — SUPREMO TRIBUNAL UNIVERSAL DE VALDORA
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Requerente:        ${nome}
+Canal Arcano:      ${email}
+Data Solicitada:   ${dataFormatada}
+Plano de Origem:   ${plano}
+Natureza do Caso:  ${tipo}
+
+Descrição Sumária:
+${descricao || '(não informado)'}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+Enviado via Portal de Petições — Supremo Tribunal Universal de Valdora
+Anno 601 V.E.`
+  );
+
+  // Try EmailJS first, fallback to mailto
+  try {
+    await emailjs.send('service_valdora', 'template_valdora', {
+      to_email: 'lior.benarush@alunoeleva.com.br',
+      from_name: nome,
+      from_email: email,
+      data_julgamento: dataFormatada,
+      plano_origem: plano,
+      tipo_caso: tipo,
+      descricao: descricao || '(não informado)',
+    });
+    showSuccess(nome, dataFormatada, btn);
+  } catch(e) {
+    // Fallback: open mailto so the message still reaches the tribunal
+    window.location.href = `mailto:lior.benarush@alunoeleva.com.br?subject=${subject}&body=${body}`;
+    setTimeout(()=> showSuccess(nome, dataFormatada, btn), 800);
+  }
+}
+
+function showSuccess(nome, data, btn){
+  btn.disabled = false;
+  btn.innerHTML = '&#x2696; Enviar Peti&ccedil;&atilde;o ao Tribunal';
+  showMsg('success',
+    `&#x2726; Petição registrada com sucesso, ${nome}.<br>
+     O Conselho deliberará sobre o agendamento para <strong>${data}</strong>.<br>
+     Uma confirmação será enviada ao seu Canal Arcano em breve.`
+  );
+  // Clear fields
+  ['req-nome','req-email','req-data','req-plano','req-tipo','req-descricao']
+    .forEach(id => { const el=document.getElementById(id); el.value=''; });
+}
+
+function showMsg(type, html){
+  const msg = document.getElementById('form-msg');
+  msg.className = `form-msg ${type} show`;
+  msg.innerHTML = html;
+  msg.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+</script>
+</body>
+</html>
